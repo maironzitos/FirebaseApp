@@ -4,14 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -30,52 +29,64 @@ public class LoginActivity extends AppCompatActivity {
         editEmail = findViewById(R.id.login_edit_email);
         editSenha = findViewById(R.id.login_edit_senha);
 
-        btnCadastrar.setOnClickListener(view -> {
+        //caso o usuario logado
+        if (auth.getCurrentUser() != null){
+            String email = auth.getCurrentUser().getEmail();
+            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+
+            //passar o e-mail p\ Main Activity
+            intent.putExtra("email",email);
+            startActivity(intent);
+        }
+
+        btnCadastrar.setOnClickListener( view ->{
             Intent intent = new Intent(getApplicationContext(),
                     CadastroActivity.class);
             startActivity(intent);
+
         });
         btnLogin.setOnClickListener(view -> {
             logar();
         });
+
     }
-    public void logar() {
+    public void logar(){
         String email = editEmail.getText().toString();
         String senha = editSenha.getText().toString();
-        if (email.isEmpty() || senha.isEmpty()) {
-            Toast.makeText(this, "Preencha os campos",
-                    Toast.LENGTH_SHORT).show();
+        if (email.isEmpty() || senha.isEmpty()){
+            Toast.makeText(this,"Preencha os campos",Toast.LENGTH_SHORT).show();
             return;
         }
-        // t -> é uma tarefa para Logar
-        Task<AuthResult> t = auth.signInWithEmailAndPassword(email, senha);
+        // t -> é uma tarefa para logar
+        auth.signInWithEmailAndPassword(email,senha)
+                .addOnSuccessListener(authResult ->{
+                    Toast.makeText(this,"BEM VINDUUUUUU",
+                            Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                    startActivity(intent);
+                })
+                .addOnFailureListener( e -> {
+                    try {
+                        //disparando a exceção
+                        throw e;
+                    }catch (FirebaseAuthInvalidUserException userException){
+                        // exceção para email invalido
+                        Toast.makeText(this,"E-mail Invalido @!@",
+                                Toast.LENGTH_SHORT).show();
+                    }catch (FirebaseAuthInvalidCredentialsException credException){
+                        //exceção pra senha incorreta
+                        Toast.makeText(this,"Senha incorreta @!@",
+                                Toast.LENGTH_SHORT).show();
+                    }catch (Exception ex){
+                        //exceção generica
+                        Toast.makeText(this,"Erro @!@",
+                                Toast.LENGTH_SHORT).show();
+                    }
 
-       //listener de sucesso
-        t.addOnSuccessListener(authResult -> {
-            Toast.makeText(this,"Bem vindo" ,
-                    Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getApplicationContext(),
-                    MainActivity.class);
-            startActivity(intent);
-        });
-        //listener de falha
-        t.addOnFailureListener( e -> {
-            //parametro e -> Exception
-            Toast.makeText(this,"Erro",Toast.LENGTH_SHORT).show();
-        });
+                } );
 
 
-
-        btnCadastrar.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(),
-                        CadastroActivity.class);
-                startActivity(intent);
-            }
-        });
     }
+
+
 }
-
-

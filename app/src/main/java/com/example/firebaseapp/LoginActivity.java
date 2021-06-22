@@ -19,7 +19,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText editEmail,editSenha;
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,40 +28,40 @@ public class LoginActivity extends AppCompatActivity {
         editEmail = findViewById(R.id.login_edit_email);
         editSenha = findViewById(R.id.login_edit_senha);
 
-        //caso o usuario logado
-        if (auth.getCurrentUser() != null){
+        //caso usuario logado
+        if(auth.getCurrentUser()!=null){
             String email = auth.getCurrentUser().getEmail();
-            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-
-            //passar o e-mail p\ Main Activity
+            Intent intent = new Intent(getApplicationContext(),
+                    MainActivity.class);
+            //passar email p/ MainActivity
             intent.putExtra("email",email);
             startActivity(intent);
         }
 
-        btnCadastrar.setOnClickListener( view ->{
+        btnCadastrar.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(),
                     CadastroActivity.class);
             startActivity(intent);
-
         });
-        btnLogin.setOnClickListener(view -> {
+        btnLogin.setOnClickListener( view -> {
             logar();
         });
-
     }
     public void logar(){
         String email = editEmail.getText().toString();
         String senha = editSenha.getText().toString();
-        if (email.isEmpty() || senha.isEmpty()){
-            Toast.makeText(this,"Preencha os campos",Toast.LENGTH_SHORT).show();
+        if(email.isEmpty() || senha.isEmpty()){
+            Toast.makeText(this,"Preencha os campos",
+                    Toast.LENGTH_SHORT).show();
             return;
         }
         // t -> é uma tarefa para logar
         auth.signInWithEmailAndPassword(email,senha)
-                .addOnSuccessListener(authResult ->{
-                    Toast.makeText(this,"BEM VINDUUUUUU",
+                .addOnSuccessListener(authResult -> {
+                    Toast.makeText(this, "Bem vindo" ,
                             Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                    Intent intent = new Intent(getApplicationContext(),
+                            MainActivity.class);
                     startActivity(intent);
                 })
                 .addOnFailureListener( e -> {
@@ -70,20 +69,20 @@ public class LoginActivity extends AppCompatActivity {
                         //disparando a exceção
                         throw e;
                     }catch (FirebaseAuthInvalidUserException userException){
-                        // exceção para email invalido
-                        Toast.makeText(this,"E-mail Invalido @!@",
+                        //exceção para email invalido
+                        Toast.makeText(this,"E-mail inválido!",
                                 Toast.LENGTH_SHORT).show();
-                    }catch (FirebaseAuthInvalidCredentialsException credException){
-                        //exceção pra senha incorreta
-                        Toast.makeText(this,"Senha incorreta @!@",
+                    }catch(FirebaseAuthInvalidCredentialsException credException){
+                        //excecao p/ senha incorreta
+                        Toast.makeText(this,"Senha incorreta!",
                                 Toast.LENGTH_SHORT).show();
-                    }catch (Exception ex){
-                        //exceção generica
-                        Toast.makeText(this,"Erro @!@",
-                                Toast.LENGTH_SHORT).show();
+                    }catch(Exception ex){
+                        //excecao genérica
+                        Toast.makeText(this, "Erro!", Toast.LENGTH_SHORT).show();
                     }
 
-                } );
+
+                });
 
 
     }

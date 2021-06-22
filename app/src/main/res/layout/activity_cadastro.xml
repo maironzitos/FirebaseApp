@@ -13,15 +13,14 @@
         android:ems="10"
         android:inputType="textEmailAddress"
         style="@style/FormStyle"
+        android:layout_marginTop="64dp"
         />
-
     <EditText
         android:id="@+id/cadastro_edit_nome"
-        android:hint="Digite o nome de usuario"
+        android:hint="Digite o nome do usuario"
         android:ems="10"
         android:inputType="textPersonName"
         style="@style/FormStyle"
-        android:layout_marginTop="64dp"
         />
 
     <EditText
@@ -30,13 +29,11 @@
         android:ems="10"
         android:inputType="textPassword"
         style="@style/FormStyle"
-        android:layout_marginTop="64dp"
         />
-
     <Button
         android:id="@+id/cadastro_btn_cadastrar"
         style="@style/FormStyle"
-        android:text="Cadastro"
+        android:text="Cadastrar"
         />
 
 </LinearLayout>

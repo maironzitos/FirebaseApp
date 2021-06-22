@@ -13,27 +13,23 @@
         android:ems="10"
         android:inputType="textEmailAddress"
         style="@style/FormStyle"
+        android:layout_marginTop="64dp"
         />
-
     <EditText
         android:id="@+id/login_edit_senha"
         android:hint="Digite sua senha"
         android:ems="10"
         android:inputType="textPassword"
         style="@style/FormStyle"
-        android:layout_marginTop="64dp"
         />
-
     <Button
         android:id="@+id/login_btn_logar"
         style="@style/FormStyle"
         android:text="Login"
         />
-
     <Button
         android:id="@+id/login_btn_cadastrar"
         style="@style/FormStyle"
         android:text="Cadastrar"
         />
-
 </LinearLayout>
